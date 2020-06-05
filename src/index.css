@@ -42,6 +42,8 @@ body {
 	font-family: 'Orbitron', sans-serif;
 	padding: 0 0.5rem 0 0.5rem;
 	font-size: 1.5rem;
+	display: inline-block;
+	width: 1.75em;
 }
 
 #timer-container {
@@ -60,8 +62,20 @@ h1 {
 	font-size: 2.5rem;
 }
 
+button {
+	background-color: transparent;
+	border: none;
+	color: #FFF;
+	cursor: pointer;
+	outline: none;
+}
+
+  button:hover{
+  	opacity: 0.8;
+  }
+
 .icon-Size {
-	font-size: 1.25rem;
+	font-size: 1.4rem;
 }
 
 #time-left {
