@@ -117,11 +117,7 @@ class PomodoroClock extends React.Component {
 	startStop() {
 		const paused = !this.state.paused;
 
-		this.setState({
-			paused
-		})	
-
-		if(this.state.paused) {
+		if(!paused) {
 			this.timerID = setInterval(
       			() => this.countDown(),
       			1000
@@ -129,6 +125,10 @@ class PomodoroClock extends React.Component {
 		} else {
 			clearInterval(this.timerID);
 		}
+
+		this.setState({
+			paused
+		})
 	}
 
 	countDown() {
