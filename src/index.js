@@ -58,11 +58,11 @@ class PomodoroClock extends React.Component {
 		super(props);
 
 		this.state = {
-			breakLength: 5,
-			sessionLength: 25,
+			breakLength: 300,
+			sessionLength: 300,
 			paused: true,
-			isSessionNext: true,
-			timer: 300 
+			isSession: true,
+			timer: 60 
 		};
 
 		this.increaseBreak = this.increaseBreak.bind(this);
@@ -72,22 +72,21 @@ class PomodoroClock extends React.Component {
 		this.startStop = this.startStop.bind(this);
 		this.reset = this.reset.bind(this);
 		this.countDown = this.countDown.bind(this);
+		this.switchCounter = this.switchCounter.bind(this);
 	}
 
 	increaseBreak() {
-		const breakUpdate = this.state.breakLength+1;
+		const breakLen = this.state.breakLength+60;
 
-		if(breakUpdate <=60) {
-			this.setState({
-				breakLength: breakUpdate
-			})
+		if(breakLen <=3600 && this.state.paused === true) {
+			this.setState({breakLength: breakLen});
 		}
 	}
 
 	increaseSession() {
-		const sessionUpdate = this.state.sessionLength+1;
+		const sessionUpdate = this.state.sessionLength+60;
 
-		if(sessionUpdate <=60) {
+		if(sessionUpdate <=3600 && this.state.paused === true) {
 			this.setState({
 				sessionLength: sessionUpdate
 			})
@@ -95,9 +94,9 @@ class PomodoroClock extends React.Component {
 	}
 
 	decreaseBreak() {
-		const breakUpdate = this.state.breakLength-1;
+		const breakUpdate = this.state.breakLength-60;
 
-		if(breakUpdate >=1) {
+		if(breakUpdate >=60 && this.state.paused === true) {
 			this.setState({
 				breakLength: breakUpdate
 			})
@@ -105,9 +104,9 @@ class PomodoroClock extends React.Component {
 	}
 
 	decreaseSession() {
-		const sessionUpdate = this.state.sessionLength-1;
+		const sessionUpdate = this.state.sessionLength-60;
 
-		if(sessionUpdate >=1) {
+		if(sessionUpdate >=60 && this.state.paused === true) {
 			this.setState({
 			sessionLength: sessionUpdate
 			})
@@ -133,36 +132,62 @@ class PomodoroClock extends React.Component {
 
 	countDown() {
 		var timer = this.state.timer-1
+
+		if(timer !== 0) {
+			this.setState({
+				timer
+			})
+		}
+		else {
+			this.switchCounter();
+		}
+  	}
+
+  	switchCounter() {
+  		let upNext;
+		let currentCounter = this.state.isSession;
+
+		if(currentCounter) {
+			upNext = this.state.breakLength
+		} else {
+			upNext = this.state.sessionLength
+		}
+
 		this.setState({
-			timer
+			timer: upNext,
+			isSession: !currentCounter
 		})
   	}
 
 	reset() {
 		this.setState({
-			breakLength: 5,
-			sessionLength: 25,
-			isSessionNext: true
+			breakLength: 300,
+			sessionLength: 1500,
+			paused: true,
+			isSession: true,
+			timer: 300 
 		})
 	}
 
 	render() {
-		let activeTitle;
-		if(this.state.isSessionNext) {
-			activeTitle = "Break"
+		let breakOrSession = this.state.isSession;
+		if(breakOrSession) {
+			breakOrSession = "Session"
 		} else {
-			activeTitle = "Session"
+			breakOrSession = "Break"
 		}
 
-		const timerFormatted = secondsToMinutes(this.state.timer);
+		const breakFormatted = secondsToMinutes(this.state.breakLength, false);
+		const sessionFormatted = secondsToMinutes(this.state.sessionLength, false);
+		const timerFormatted = secondsToMinutes(this.state.timer, true);
 
 		return (
 			<React.Fragment>
 				<div id="container">
 					<h1>Pomodoro Clock</h1>
-					<LengthBlock title="Break" value={this.state.breakLength} increaseHandler={this.increaseBreak} decreaseHandler={this.decreaseBreak} />
-					<LengthBlock title="Session" value={this.state.sessionLength} increaseHandler={this.increaseSession} decreaseHandler={this.decreaseSession} />
-					<Timer status={this.state.goCountdown} title={activeTitle} value={timerFormatted}/>
+					<LengthBlock title="Break" value={breakFormatted} increaseHandler={this.increaseBreak} decreaseHandler={this.decreaseBreak} />
+					<LengthBlock title="Session" value={sessionFormatted} increaseHandler={this.increaseSession} decreaseHandler={this.decreaseSession} />
+					<Timer title={breakOrSession} value={timerFormatted}/>
 					<ControlBlock stopStartHandler={this.startStop} resetHandler={this.reset} />
 				</div>
 				<ReactFCCtest />
@@ -179,6 +204,6 @@ ReactDOM.render(
 );
 
 
-function secondsToMinutes(seconds) {
-	return Math.floor(seconds / 60) + ':' + ('0' + Math.floor(seconds % 60)).slice(-2);
+function secondsToMinutes(seconds, includeSeconds) {
+	return (includeSeconds)? Math.floor(seconds / 60) + ':' + ('0' + Math.floor(seconds % 60)).slice(-2) : Math.floor(seconds / 60);
 } 
