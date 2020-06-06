@@ -58,8 +58,8 @@ class PomodoroClock extends React.Component {
 		super(props);
 
 		this.state = {
-			breakLength: 300,
-			sessionLength: 300,
+			breakLength: 60,
+			sessionLength: 60,
 			paused: true,
 			isSession: true,
 			timer: 60 
@@ -80,6 +80,12 @@ class PomodoroClock extends React.Component {
 
 		if(breakLen <=3600 && this.state.paused === true) {
 			this.setState({breakLength: breakLen});
+
+			let sessionActive = this.state.isSession;
+
+			if(!sessionActive) {
+				this.setState({timer: breakLen});
+			}
 		}
 	}
 
@@ -89,7 +95,13 @@ class PomodoroClock extends React.Component {
 		if(sessionUpdate <=3600 && this.state.paused === true) {
 			this.setState({
 				sessionLength: sessionUpdate
-			})
+			});
+
+			let sessionActive = this.state.isSession;
+
+			if(sessionActive) {
+				this.setState({timer: sessionUpdate});
+			}
 		}
 	}
 
@@ -99,7 +111,13 @@ class PomodoroClock extends React.Component {
 		if(breakUpdate >=60 && this.state.paused === true) {
 			this.setState({
 				breakLength: breakUpdate
-			})
+			});
+
+			let sessionActive = this.state.isSession;
+
+			if(!sessionActive) {
+				this.setState({timer: breakUpdate});
+			}
 		}
 	}
 
@@ -109,7 +127,14 @@ class PomodoroClock extends React.Component {
 		if(sessionUpdate >=60 && this.state.paused === true) {
 			this.setState({
 			sessionLength: sessionUpdate
-			})
+			});
+
+			
+			let sessionActive = this.state.isSession;
+
+			if(sessionActive) {
+				this.setState({timer: sessionUpdate});
+			}
 		}
 	}					
 
@@ -161,11 +186,11 @@ class PomodoroClock extends React.Component {
 
 	reset() {
 		this.setState({
-			breakLength: 300,
-			sessionLength: 1500,
+			breakLength: 60,
+			sessionLength: 60,
 			paused: true,
 			isSession: true,
-			timer: 300 
+			timer: 60 
 		})
 	}
 
