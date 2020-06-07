@@ -58,13 +58,13 @@ class PomodoroClock extends React.Component {
 		super(props);
 
 		this.state = {
-			breakLength: 5,
-			sessionLength: 5,
+			breakLength: 300,
+			sessionLength: 1500,
 			paused: true,
 			isSession: true,
-			timer: 5 
+			timer: 1500 
 		};
-
+		this.audio = React.createRef();
 		this.increaseBreak = this.increaseBreak.bind(this);
 		this.increaseSession = this.increaseSession.bind(this);
 		this.decreaseBreak = this.decreaseBreak.bind(this);
@@ -164,6 +164,7 @@ class PomodoroClock extends React.Component {
 			})
 		}
 		else {
+			this.audio.current.play();
 			this.switchCounter();
 		}
   	}
@@ -186,14 +187,16 @@ class PomodoroClock extends React.Component {
 
 	reset() {
 		this.setState({
-			breakLength: 60,
-			sessionLength: 60,
+			breakLength: 300,
+			sessionLength: 1500,
 			paused: true,
 			isSession: true,
-			timer: 60 
+			timer: 1500 
 		})
 
 		clearInterval(this.timerID);
+		this.audio.current.pause();
+		this.audio.current.currentTime = 0;
 	}
 
 	render() {
@@ -225,8 +228,8 @@ class PomodoroClock extends React.Component {
 					<Timer title={breakOrSession} value={timerFormatted} style={fontColor} />
 					<ControlBlock stopStartHandler={this.startStop} resetHandler={this.reset} />
 				</div>
-				{ (this.state.timer === 0) && 
-				<audio ref='audio_tag' src='https://s3.amazonaws.com/freecodecamp/simonSound4.mp3' autoPlay />}
+				<audio ref={this.audio} id="beep" src={"https://s3-us-west-2.amazonaws.com/s.cdpn.io/3/success.mp3"} />
+				<ReactFCCtest />
 			</React.Fragment>
 		);
 	}
