@@ -45,9 +45,9 @@ class ControlBlock extends React.Component {
 class Timer extends React.Component {
 	render() {
 		return (
-			<div id="timer-container"> 
-				<div id="timer-label">{this.props.title}</div>
-				<span id="time-left">{this.props.value}</span>
+			<div id="timer-container" > 
+				<div id="timer-label" style={this.props.style}>{this.props.title}</div>
+				<div id="time-left" style={this.props.style}>{this.props.value}</div>
 			</div>
 		);
 	}
@@ -164,7 +164,6 @@ class PomodoroClock extends React.Component {
 			})
 		}
 		else {
-
 			this.switchCounter();
 		}
   	}
@@ -193,6 +192,8 @@ class PomodoroClock extends React.Component {
 			isSession: true,
 			timer: 60 
 		})
+
+		clearInterval(this.timerID);
 	}
 
 	render() {
@@ -207,13 +208,21 @@ class PomodoroClock extends React.Component {
 		const sessionFormatted = secondsToMinutes(this.state.sessionLength, false);
 		const timerFormatted = secondsToMinutes(this.state.timer, true);
 
+		var fontColor;
+
+		if(this.state.timer <= 59) {
+			fontColor = { color: "red"};
+		} else {
+			fontColor = { color: "white"};
+		}
+
 		return (
 			<React.Fragment>
 				<div id="container">
 					<h1>Pomodoro Clock</h1>
 					<LengthBlock title="Break" value={breakFormatted} increaseHandler={this.increaseBreak} decreaseHandler={this.decreaseBreak} />
 					<LengthBlock title="Session" value={sessionFormatted} increaseHandler={this.increaseSession} decreaseHandler={this.decreaseSession} />
-					<Timer title={breakOrSession} value={timerFormatted}/>
+					<Timer title={breakOrSession} value={timerFormatted} style={fontColor} />
 					<ControlBlock stopStartHandler={this.startStop} resetHandler={this.reset} />
 				</div>
 				{ (this.state.timer === 0) && 
@@ -232,5 +241,5 @@ ReactDOM.render(
 
 
 function secondsToMinutes(seconds, includeSeconds) {
-	return (includeSeconds)? Math.floor(seconds / 60) + ':' + ('0' + Math.floor(seconds % 60)).slice(-2) : Math.floor(seconds / 60);
+	return (includeSeconds)? ('0' + Math.floor(seconds / 60)).slice(-2) + ':' + ('0' + Math.floor(seconds % 60)).slice(-2) : Math.floor(seconds / 60);
 } 
