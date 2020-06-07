@@ -9,31 +9,6 @@ import { faArrowDown } from '@fortawesome/free-solid-svg-icons'
 import { faSyncAlt } from '@fortawesome/free-solid-svg-icons'
 import ReactFCCtest from 'react-fcctest';
 
-class Audio extends React.Component {
-  constructor(props) {
-    super(props);
-  	this.state={ selectedColor: "yellow"}
-	this.playAudio = () => {
-		console.log(this.yellow);
-		this.yellow.play();
-	}
-
-  }
-
-  render() {
-    return (
-      <div className="stage">
-		<audio ref={(yellow) => { this.yellow = yellow; }}>
-			<source src="https://s3.amazonaws.com/freecodecamp/simonSound4.mp3" type="audio/mpeg" >
-			</source>
-		</audio>
-		
-			<button className="btn btn-info" onClick={this.playAudio}>test sound</button>
-      </div>
-    );
-  }
-}
-
 class LengthBlock extends React.Component {
 	render() {
 		return (
@@ -83,11 +58,11 @@ class PomodoroClock extends React.Component {
 		super(props);
 
 		this.state = {
-			breakLength: 60,
-			sessionLength: 60,
+			breakLength: 5,
+			sessionLength: 5,
 			paused: true,
 			isSession: true,
-			timer: 60 
+			timer: 5 
 		};
 
 		this.increaseBreak = this.increaseBreak.bind(this);
@@ -98,28 +73,7 @@ class PomodoroClock extends React.Component {
 		this.reset = this.reset.bind(this);
 		this.countDown = this.countDown.bind(this);
 		this.switchCounter = this.switchCounter.bind(this);
-		/**this.audio = React.createRef();*/
 	}
-
-	/**componentDidMount() {
-      this.audio = new Audio('./chime.mp3')
-      this.audio.load()
-      this.playAudio()
-	}
-
-	playAudio() {
-	    const audioPromise = this.audio.play()
-	    if (audioPromise !== undefined) {
-	      audioPromise
-	        .then(_ => {
-	          // autoplay started
-	        })
-	        .catch(err => {
-	          // catch dom exception
-	          console.info(err)
-	        })
-	    }
-	}*/
 
 	increaseBreak() {
 		const breakLen = this.state.breakLength+60;
@@ -204,7 +158,7 @@ class PomodoroClock extends React.Component {
 	countDown() {
 		var timer = this.state.timer-1
 
-		if(timer !== 0) {
+		if(timer >= 0) {
 			this.setState({
 				timer
 			})
@@ -255,7 +209,6 @@ class PomodoroClock extends React.Component {
 
 		return (
 			<React.Fragment>
-				<Audio />
 				<div id="container">
 					<h1>Pomodoro Clock</h1>
 					<LengthBlock title="Break" value={breakFormatted} increaseHandler={this.increaseBreak} decreaseHandler={this.decreaseBreak} />
@@ -263,9 +216,8 @@ class PomodoroClock extends React.Component {
 					<Timer title={breakOrSession} value={timerFormatted}/>
 					<ControlBlock stopStartHandler={this.startStop} resetHandler={this.reset} />
 				</div>
-				{ this.state.isSession && 
-				<audio ref='audio_tag' src='https://s3.amazonaws.com/freecodecamp/simonSound4.mp3' autoPlay />};
-		
+				{ (this.state.timer === 0) && 
+				<audio ref='audio_tag' src='https://s3.amazonaws.com/freecodecamp/simonSound4.mp3' autoPlay />}
 			</React.Fragment>
 		);
 	}
