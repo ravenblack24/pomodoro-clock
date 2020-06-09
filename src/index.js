@@ -8,6 +8,7 @@ import { faArrowUp } from '@fortawesome/free-solid-svg-icons'
 import { faArrowDown } from '@fortawesome/free-solid-svg-icons'
 import { faSyncAlt } from '@fortawesome/free-solid-svg-icons'
 import ReactFCCtest from 'react-fcctest';
+import {Helmet} from "react-helmet";
 
 class LengthBlock extends React.Component {
 	render() {
@@ -221,6 +222,11 @@ class PomodoroClock extends React.Component {
 
 		return (
 			<React.Fragment>
+				<Helmet>
+	            	<meta charSet="utf-8" />
+	            	<title>ReactJS - Pomodoro Clock</title>
+	            	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+	        	</Helmet>
 				<div id="container">
 					<h1>Pomodoro Clock</h1>
 					<LengthBlock title="Break" value={breakFormatted} increaseHandler={this.increaseBreak} decreaseHandler={this.decreaseBreak} />
