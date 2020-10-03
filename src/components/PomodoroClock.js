@@ -171,6 +171,7 @@ export default class PomodoroClock extends React.Component {
 
 		return (
 			<React.Fragment>
+				<a href="https://github.com/ravenblack24/pomodoro-clock"><img loading="lazy" width="149" height="149" src="https://github.blog/wp-content/uploads/2008/12/forkme_left_darkblue_121621.png?resize=149%2C149" class="attachment-full size-full" alt="Fork me on GitHub" data-recalc-dims="1" /></a>
 				<div id="container">
 					<h1>Pomodoro Clock</h1>
 					<LengthBlock title="Break" value={breakFormatted} increaseHandler={this.increaseBreak} decreaseHandler={this.decreaseBreak} />
