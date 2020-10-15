@@ -9,7 +9,7 @@
 * [Contact](#contact)
 
 ## Status
-Project is complete and an [interactive demo is available here](https://ravenblack24.github.io/pomodoro-clock/).
+An [interactive demo is available here](https://ravenblack24.github.io/pomodoro-clock/).
 
 ## General info
 This app was built to satisfy and subsequently validated against the following User Stories:
